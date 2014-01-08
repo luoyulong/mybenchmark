@@ -1,0 +1,27 @@
+#Tell tau to not profile these functions
+BEGIN_EXCLUDE_LIST
+double* get(int size)
+
+END_EXCLUDE_LIST
+
+
+
+#Exclude these files from profiling
+BEGIN_FILE_EXCLUDE_LIST
+*.so
+END_FILE_EXCLUDE_LIST
+
+
+
+BEGIN_INSTRUMENT_SECTION
+#插桩所有在文件loop_test.cpp中函数multiply内的循环
+loops routine="#"
+loops routine="void stencil_3D_27P_OPT(DATATYPE*** next,DATATYPE*** now,DATATYPE alpha,DATATYPE beta,DATATYPE gamma,DATATYPE delta)"
+loops routine="void stencil_3D_27P(DATATYPE*** next,DATATYPE*** now,DATATYPE alpha,DATATYPE beta,DATATYPE gamma,DATATYPE delta)"
+#插入代码段
+#file = "line_test.cpp" line = 9 code = "printf(\"i=%d: \", i);"
+#exit routine ="int foo()" code = "cout <<\"exiting foo\"<<endl;"
+#entry routine ="int foo()" code = "cout <<\"entering foo\"<<endl;i"
+END_INSTRUMENT_SECTION
+
+
