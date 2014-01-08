@@ -26,8 +26,10 @@ void run()
 
     time_t t_start,t_end;
     t_start = time(NULL) ;
-    stencil_3D_27P_OPT(x,y,3,5,3,0.1);
-    stencil_3D_27P(x,y,3,5,3,0.1);
+//    stencil_3D_27P_OPT(x,y,3,5,3,0.1);
+//    stencil_3D_27P(x,y,3,5,3,0.1);
+    stencil_3D_7P(x,y,3);
+    stencil_3D_7P_OPT(x,y,3);
     t_end = time(NULL) ;
     std::cout<<"time:"<<(double)difftime(t_end,t_start)<<std::endl;
 }
@@ -38,9 +40,9 @@ void stencil_3D_7P(DATATYPE*** next,DATATYPE*** now,DATATYPE fac)
 {
     int i,j,k,t;
     for (t = 0; t < STEPS; t++) {
-        for (k = 1; k < nz - 1; k++) {
-            for (j = 1; j < ny - 1; j++) {
-                for (i = 1; i < nx - 1; i++) {
+        for (k = 1; k < N - 1; k++) {
+            for (j = 1; j < N - 1; j++) {
+                for (i = 1; i < N - 1; i++) {
                     next[i][j][k]=now[i][j][k+1]+now[i][j][k-1]
                             +now[i][j-1][k]+now[i][j+1][k]
                             +now[i-1][j][k]+now[i+1][j][k]
@@ -55,9 +57,9 @@ void stencil_3D_7P_OPT(DATATYPE*** next,DATATYPE*** now,DATATYPE fac)
 {
     int i,j,k,t;
     for (t = 0; t < STEPS; t++)
-        for (k = 1; k < nz - 1; k++)
-            for (i = 1; i < nx - 1; i++)
-            for (j = 1; j < ny - 1; j++)
+        for (k = 1; k < N - 1; k++)
+            for (i = 1; i < N - 1; i++)
+            for (j = 1; j < N - 1; j++)
                     next[i][j][k]=now[i][j][k+1]+now[i][j][k-1]
                             +now[i][j-1][k]+now[i][j+1][k]
                             +now[i-1][j][k]+now[i+1][j][k]
