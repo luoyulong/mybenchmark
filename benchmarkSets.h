@@ -4,7 +4,7 @@
 #include <iostream>
 #include "stdlib.h"
 #include "time.h"
-#define N 32
+#define N 10
 #define STEPS 100
 #define DATATYPE float
 void stencil_3D_27P(DATATYPE*** next,DATATYPE*** now,

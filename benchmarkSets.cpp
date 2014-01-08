@@ -26,10 +26,10 @@ void run()
 
     time_t t_start,t_end;
     t_start = time(NULL) ;
-//    stencil_3D_27P_OPT(x,y,3,5,3,0.1);
-//    stencil_3D_27P(x,y,3,5,3,0.1);
-    stencil_3D_7P(x,y,3);
-    stencil_3D_7P_OPT(x,y,3);
+        stencil_3D_27P_OPT(x,y,3,5,3,0.1);
+        stencil_3D_27P(x,y,3,5,3,0.1);
+   // stencil_3D_7P(x,y,3);
+    //stencil_3D_7P_OPT(x,y,3);
     t_end = time(NULL) ;
     std::cout<<"time:"<<(double)difftime(t_end,t_start)<<std::endl;
 }
@@ -40,9 +40,9 @@ void stencil_3D_7P(DATATYPE*** next,DATATYPE*** now,DATATYPE fac)
 {
     int i,j,k,t;
     for (t = 0; t < STEPS; t++) {
-        for (k = 1; k < N - 1; k++) {
-            for (j = 1; j < N - 1; j++) {
-                for (i = 1; i < N - 1; i++) {
+        for (k = 1; k < N - 3; k++) {
+            for (j = 1; j < N - 3; j++) {
+                for (i = 1; i < N - 3; i++) {
                     next[i][j][k]=now[i][j][k+1]+now[i][j][k-1]
                             +now[i][j-1][k]+now[i][j+1][k]
                             +now[i-1][j][k]+now[i+1][j][k]
@@ -57,9 +57,9 @@ void stencil_3D_7P_OPT(DATATYPE*** next,DATATYPE*** now,DATATYPE fac)
 {
     int i,j,k,t;
     for (t = 0; t < STEPS; t++)
-        for (k = 1; k < N - 1; k++)
-            for (i = 1; i < N - 1; i++)
-            for (j = 1; j < N - 1; j++)
+        for (k = 1; k < N - 3; k++)
+            for (i = 1; i < N - 3; i++)
+                for (j = 1; j < N - 3; j++)
                     next[i][j][k]=now[i][j][k+1]+now[i][j][k-1]
                             +now[i][j-1][k]+now[i][j+1][k]
                             +now[i-1][j][k]+now[i+1][j][k]
@@ -75,16 +75,15 @@ void stencil_3D_27P(DATATYPE*** next,DATATYPE*** now,
     int i,j,k;
     for(int tstep=0;tstep<STEPS;tstep++){
 #pragma scop
-        for(k=1;k<N-1;k++)
+        for(i=1;i<N-1;i++)
             for(j=1;j<N-1;j++)
-                for(i=1;i<N-1;i++)
+                for(k=1;k<N-1;k++)
                     next[i][j][k] =
                             alpha * (now[i][j][k] )
 
                             +beta * (now[i][j][k-1] + now[i][j-1][k] +
                             now[i][j+1][k] + now[i][j][k+1] +now[i-1][j][k] + now[i+1][j][k])
 
-                            //i-1
                             +gamma * (now[i-1][j][k-1] + now[i-1][j-1][k]
                             +now[i-1][j+1][k]+now[i-1][j][k+1]
 
@@ -95,8 +94,6 @@ void stencil_3D_27P(DATATYPE*** next,DATATYPE*** now,
                             +delta*(now[i-1][j-1][k-1] + now[i-1][j+1][k-1] +now[i-1][j-1][k+1]
                             + now[i-1][j+1][k+1] +now[i+1][j-1][k-1] + now[i+1][j+1][k-1]
                             +now[i+1][j-1][k+1] + now[i+1][j+1][k+1]);
-        //        if(tstep%10==0)
-        //            std::cout<<(tstep*10/STEPS)<<"\n";
     }
 }
 void stencil_3D_27P_OPT(DATATYPE*** next,DATATYPE*** now,
@@ -104,8 +101,9 @@ void stencil_3D_27P_OPT(DATATYPE*** next,DATATYPE*** now,
 {
     int i,j,k;
     for(int tstep=0;tstep<STEPS;tstep++){
-        for(k=1;k<N-1;k++)
-            for(i=1;i<N-1;i++)
+
+        for(i=1;i<N-1;i++)
+            for(k=1;k<N-1;k++)
                 for(j=1;j<N-1;j++)
                     next[i][j][k] =
                             alpha * (now[i][j][k] )
@@ -120,43 +118,6 @@ void stencil_3D_27P_OPT(DATATYPE*** next,DATATYPE*** now,
                             +delta*(now[i-1][j-1][k-1] + now[i-1][j+1][k-1] +now[i-1][j-1][k+1]
                             + now[i-1][j+1][k+1] +now[i+1][j-1][k-1] + now[i+1][j+1][k-1]
                             +now[i+1][j-1][k+1] + now[i+1][j+1][k+1]);
-        //        if(tstep%10==0)
-        //            std::cout<<(tstep*10/STEPS)<<"\n";
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
