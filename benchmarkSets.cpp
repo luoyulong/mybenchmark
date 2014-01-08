@@ -34,27 +34,34 @@ void run()
 
 
 
-void stencil_3D_(DATATYPE*** next,DATATYPE*** now,)
+void stencil_3D_7P(DATATYPE*** next,DATATYPE*** now,DATATYPE fac)
 {
     int i,j,k,t;
-    for (t = 0; t < timesteps; t++) {
-       for (k = 1; k < nz - 1; k++) {
-         for (j = 1; j < ny - 1; j++) {
-           for (i = 1; i < nx - 1; i++) {
-               next[i][j][k]=now[][][]
-             Anext[Index3D (nx, ny, i, j, k)] =
-               A0[Index3D (nx, ny, i, j, k + 1)] +
-               A0[Index3D (nx, ny, i, j, k - 1)] +
-               A0[Index3D (nx, ny, i, j + 1, k)] +
-               A0[Index3D (nx, ny, i, j - 1, k)] +
-               A0[Index3D (nx, ny, i + 1, j, k)] +
-               A0[Index3D (nx, ny, i - 1, j, k)]
-               - 6.0 * A0[Index3D (nx, ny, i, j, k)] / (fac*fac);
-           }
-         }
-       }
+    for (t = 0; t < STEPS; t++) {
+        for (k = 1; k < nz - 1; k++) {
+            for (j = 1; j < ny - 1; j++) {
+                for (i = 1; i < nx - 1; i++) {
+                    next[i][j][k]=now[i][j][k+1]+now[i][j][k-1]
+                            +now[i][j-1][k]+now[i][j+1][k]
+                            +now[i-1][j][k]+now[i+1][j][k]
+                            - 6.0 * now[i][j][k] / (fac*fac);
+                }
+            }
+        }
 
+    }
 }
+void stencil_3D_7P_OPT(DATATYPE*** next,DATATYPE*** now,DATATYPE fac)
+{
+    int i,j,k,t;
+    for (t = 0; t < STEPS; t++)
+        for (k = 1; k < nz - 1; k++)
+            for (i = 1; i < nx - 1; i++)
+            for (j = 1; j < ny - 1; j++)
+                    next[i][j][k]=now[i][j][k+1]+now[i][j][k-1]
+                            +now[i][j-1][k]+now[i][j+1][k]
+                            +now[i-1][j][k]+now[i+1][j][k]
+                            - 6.0 * now[i][j][k]/(fac*fac);
 }
 
 
